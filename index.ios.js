@@ -9,26 +9,60 @@ import {
   AppRegistry,
   StyleSheet,
   Text,
-  View
+  View,
+  ScrollView,
+  RefreshControl,
+  TouchableOpacity,
 } from 'react-native';
 
 export default class DemoPullRefresh extends Component {
+
+  state = {
+    isRefreshing: false,
+  };
+
+  refreshData() {
+    console.log('Refreshing...');
+    this.setState({ isRefreshing: true });
+
+    setTimeout(() => {
+      console.log('Refreshed.');
+      this.setState({ isRefreshing: false });
+    }, 1000);
+  }
+
+  handlePullRefresh() {
+    console.log('Pulled to refresh');
+    this.refreshData();
+  }
+
+  handleButtonPress() {
+    console.log('Clicked button');
+    this.refreshData();
+  }
+
   render() {
+    const { isRefreshing } = this.state;
+
     return (
-      <View style={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.container}
+        refreshControl={
+          <RefreshControl refreshing={isRefreshing} onRefresh={() => this.handlePullRefresh()} />
+        }
+      >
         <Text style={styles.welcome}>
           Welcome to React Native!
         </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
-      </View>
+        <TouchableOpacity onPress={() => this.handleButtonPress()}>
+          <Text style={styles.instructions}>
+            Click here to load
+          </Text>
+        </TouchableOpacity>
+      </ScrollView>
     );
   }
+
 }
 
 const styles = StyleSheet.create({
