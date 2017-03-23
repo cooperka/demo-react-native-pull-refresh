@@ -21,7 +21,17 @@ export default class DemoPullRefresh extends Component {
     isRefreshing: false,
   };
 
-  refreshData() {
+  refreshDataQuickly() {
+    console.log('Refreshing...');
+    this.setState({ isRefreshing: true });
+
+    setTimeout(() => {
+      console.log('Refreshed.');
+      this.setState({ isRefreshing: false });
+    }, 10);
+  }
+
+  refreshDataSlowly() {
     console.log('Refreshing...');
     this.setState({ isRefreshing: true });
 
@@ -33,12 +43,12 @@ export default class DemoPullRefresh extends Component {
 
   handlePullRefresh() {
     console.log('Pulled to refresh');
-    this.refreshData();
+    this.refreshDataSlowly();
   }
 
   handleButtonPress() {
     console.log('Clicked button');
-    this.refreshData();
+    this.refreshDataQuickly();
   }
 
   render() {
@@ -56,7 +66,7 @@ export default class DemoPullRefresh extends Component {
         </Text>
         <TouchableOpacity onPress={() => this.handleButtonPress()}>
           <Text style={styles.instructions}>
-            Click here to load
+            Click here to quick-refresh (or pull to slow-refresh)
           </Text>
         </TouchableOpacity>
       </ScrollView>
