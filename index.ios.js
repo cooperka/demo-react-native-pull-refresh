@@ -14,6 +14,8 @@ import {
   RefreshControl,
   TouchableOpacity,
 } from 'react-native';
+import Immutable from 'immutable';
+import ImmutableListView from 'react-native-immutable-list-view';
 
 export default class DemoPullRefresh extends Component {
 
@@ -55,11 +57,8 @@ export default class DemoPullRefresh extends Component {
     const { isRefreshing } = this.state;
 
     return (
-      <ScrollView
-        contentContainerStyle={styles.container}
-        refreshControl={
-          <RefreshControl refreshing={isRefreshing} onRefresh={() => this.handlePullRefresh()} />
-        }
+      <View
+        style={styles.container}
       >
         <Text style={styles.welcome}>
           Welcome to React Native!
@@ -69,7 +68,15 @@ export default class DemoPullRefresh extends Component {
             Click here to quick-refresh (or pull to slow-refresh)
           </Text>
         </TouchableOpacity>
-      </ScrollView>
+        <ImmutableListView
+          contentContainerStyle={styles.listView}
+          refreshControl={
+            <RefreshControl refreshing={isRefreshing} onRefresh={() => this.handlePullRefresh()} />
+          }
+          immutableData={Immutable.List([1, 2, 3])}
+          renderRow={(rowData) => <View><Text>{rowData}</Text></View>}
+        />
+      </View>
     );
   }
 
@@ -78,9 +85,12 @@ export default class DemoPullRefresh extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#F5FCFF',
+  },
+  listView: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    margin: 10,
   },
   welcome: {
     fontSize: 20,
