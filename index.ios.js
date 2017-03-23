@@ -20,41 +20,48 @@ import ImmutableListView from 'react-native-immutable-list-view';
 export default class DemoPullRefresh extends Component {
 
   state = {
+    data: Immutable.List([1, 2, 3]),
     isRefreshing: false,
   };
 
-  refreshDataQuickly() {
+  refreshDataReal() {
     console.log('Refreshing...');
     this.setState({ isRefreshing: true });
 
     setTimeout(() => {
+      this.setState({ data: Immutable.List([1, 2, 3]) });
+    }, 50);
+
+    setTimeout(() => {
       console.log('Refreshed.');
       this.setState({ isRefreshing: false });
-    }, 10);
+    }, 100);
   }
 
-  refreshDataSlowly() {
+  refreshDataMock() {
     console.log('Refreshing...');
     this.setState({ isRefreshing: true });
 
     setTimeout(() => {
       console.log('Refreshed.');
       this.setState({ isRefreshing: false });
-    }, 1000);
+    }, 500);
   }
 
   handlePullRefresh() {
     console.log('Pulled to refresh');
-    this.refreshDataSlowly();
+    this.refreshDataMock();
   }
 
   handleButtonPress() {
     console.log('Clicked button');
-    this.refreshDataQuickly();
+    this.refreshDataReal();
   }
 
   render() {
-    const { isRefreshing } = this.state;
+    const { data, isRefreshing } = this.state;
+
+    console.log('@@@ render, refreshing:', isRefreshing);
 
     return (
       <View
@@ -65,7 +72,7 @@ export default class DemoPullRefresh extends Component {
         </Text>
         <TouchableOpacity onPress={() => this.handleButtonPress()}>
           <Text style={styles.instructions}>
-            Click here to quick-refresh (or pull to slow-refresh)
+            Click here to change data (or pull to mock refresh)
           </Text>
         </TouchableOpacity>
         <ImmutableListView
@@ -73,8 +80,8 @@ export default class DemoPullRefresh extends Component {
           refreshControl={
             <RefreshControl refreshing={isRefreshing} onRefresh={() => this.handlePullRefresh()} />
           }
-          immutableData={Immutable.List([1, 2, 3])}
-          renderRow={(rowData) => <View><Text>{rowData}</Text></View>}
+          immutableData={data}
+          renderRow={(rowData) => <Text>{rowData}</Text>}
         />
       </View>
     );
