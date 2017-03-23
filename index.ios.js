@@ -25,17 +25,15 @@ export default class DemoPullRefresh extends Component {
   };
 
   refreshDataReal() {
-    console.log('Refreshing...');
-    this.setState({ isRefreshing: true });
-
     setTimeout(() => {
-      this.setState({ data: Immutable.List([1, 2, 3]) });
-    }, 50);
+      console.log('Refreshing...');
+      this.setState({ data: Immutable.List([1, 2, 3]), isRefreshing: true });
+    }, 20);
 
     setTimeout(() => {
       console.log('Refreshed.');
       this.setState({ isRefreshing: false });
-    }, 100);
+    }, 40);
   }
 
   refreshDataMock() {
